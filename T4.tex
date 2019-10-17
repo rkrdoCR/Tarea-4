@@ -1,0 +1,201 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{graphs, graphs.standard, quotes}
+\usetikzlibrary{positioning, arrows, automata}
+\usepackage{tkz-berge}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tabularx}
+\usepackage{algorithmic}
+\usepackage{algorithm2e}
+\usepackage[utf8]{inputenc}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{etoolbox}
+\usepackage{xcolor}[dvipsnames]
+\usepackage{keyval}
+\usepackage[shortlabels]{enumitem}
+\usepackage{multicol}
+\setlength{\columnsep}{5pt}
+\raggedcolumns 
+
+\def\Side{\ChessSide}
+\newcommand\ChessBoxA{%
+  {\fboxsep=0pt\fbox{\color{\ChessColori}\rule{\Side}{\Side}}}}
+\newcommand\ChessBoxB{%
+  {\fboxsep=0pt\fbox{\color{\ChessColorii}\rule{\Side}{\Side}}}}
+
+\makeatletter
+\newcommand\Row[1]{%
+  \par\nobreak\nointerlineskip\vskip-\fboxrule%
+  \@tfor\@tempa:=#1 \do {\csname ChessBox\@tempa\endcsname\kern-\fboxrule}}
+\define@key{chessB}{side}{\def\ChessSide{#1}}
+\define@key{chessB}{colori}{\def\ChessColori{#1}}
+\define@key{chessB}{colorii}{\def\ChessColorii{#1}}
+\setkeys{chessB}{
+  side=1.5em,
+  colori=black!70,
+  colorii=white}
+\makeatother
+
+\newcommand\Conventional[1][]{%
+\begin{Chessboard}[#1]
+\Row{B,A,B,A,B,A,B,A}
+\Row{A,B,A,B,A,B,A.B}
+\Row{B,A,B,A,B,A,B,A}
+\Row{A,B,A,B,A,B,A.B}
+\Row{B,A,B,A,B,A,B,A}
+\Row{A,B,A,B,A,B,A.B}
+\Row{B,A,B,A,B,A,B,A}
+\Row{A,B,A,B,A,B,A.B}
+\end{Chessboard}%
+}
+
+\newenvironment{Chessboard}[1][]
+  {\setkeys{chessB}{#1}%
+  \par\medskip\setlength\parindent{0pt}}
+  {\par\medskip}
+
+\renewcommand{\familydefault}{\rmdefault}
+\renewcommand{\refname}{Referencias}
+
+\BeforeBeginEnvironment{figure}{\vskip-2ex}
+\AfterEndEnvironment{figure}{\vskip-2ex}
+
+\begin{document}
+
+\begin{titlepage}
+	\centering
+	\includegraphics[width=0.30\textwidth]{images/Teclogocompleto.jpg}\par\vspace{1cm}
+	{\scshape\large \textbf{Instituto Tecnológico de Costa Rica }\par}
+	\vspace{1cm}
+	{\scshape\Large MC 6102 Análisis y diseño del Algoritmos\par}
+	\vspace{1.5cm}
+	{\Large\bfseries Tarea \#4\par}
+	\vspace{2cm}
+	{\Large\itshape Ricardo Alfaro Villalobos\par}
+	\vfill
+	Profesor:\par
+	Jose Araya Monge\textsc{}
+
+	\vfill
+
+% Bottom of the page
+	{\large 18 de octubre del 2019\par}
+\end{titlepage}
+
+\begin{section}{Tablero y guijarros.} \noindent 
+\begin{enumerate}[a., nolistsep, font=\bfseries]
+\setlength\multicolsep{0pt}
+\item \textbf{Numero de patrones.} Cada columna puede tener 8 patrones legales, 1 vacío(sin ningún guijarro en ninguna celda), 4 con un solo guijarro en cualquiera de las 4 celdas y 3 con dos guijarros (el las celdas 1 y 4, 1 y 3 o 2 y 4). La siguiente imagen describe de manera gráfica estos patrones.  
+
+\begin{center}
+\begin{multicols}{8}
+\begin{Chessboard}
+\textbf{1}
+\vspace{1em}
+\Row{B}
+\Row{B}
+\Row{B}
+\Row{B}
+\end{Chessboard}
+\columnbreak
+\begin{Chessboard}
+\textbf{2}
+\vspace{1em}
+\Row{A}
+\Row{B}
+\Row{B}
+\Row{B}
+\end{Chessboard}
+\columnbreak
+\begin{Chessboard}
+\textbf{3}
+\vspace{1em}
+\Row{B}
+\Row{A}
+\Row{B}
+\Row{B}
+\end{Chessboard}
+\columnbreak
+\begin{Chessboard}
+\textbf{4}
+\vspace{1em}
+\Row{B}
+\Row{B}
+\Row{A}
+\Row{B}
+\end{Chessboard}
+\columnbreak
+\begin{Chessboard}
+\textbf{5}
+\vspace{1em}
+\Row{B}
+\Row{B}
+\Row{B}
+\Row{A}
+\end{Chessboard}
+\columnbreak
+\begin{Chessboard}
+\textbf{6}
+\vspace{1em}
+\Row{A}
+\Row{B}
+\Row{B}
+\Row{A}
+\end{Chessboard}
+\columnbreak
+\begin{Chessboard}
+\textbf{7}
+\vspace{1em}
+\Row{A}
+\Row{B}
+\Row{A}
+\Row{B}
+\end{Chessboard}
+\columnbreak
+\begin{Chessboard}
+\textbf{8}
+\vspace{1em}
+\Row{B}
+\Row{A}
+\Row{B}
+\Row{A}
+\end{Chessboard}
+\end{multicols}
+\end{center}
+
+Cada patrón tiene un numero determinado de patrones compatibles, por lo que al colocar un nuevo patrón en la posición $k+1$, en subproblemas de tamaño $k$, es posible determinar si se se ha logrado la solución optima a ese punto o si existe otra combinación valida de patrones que de un máximo en comparación con el actual.\\
+
+\item \textbf{Algoritmo.} Crear una matriz de compatibilidad entre patrones en un paso previo a calcular la mejor configuración posible de guijarros en el tablero . Para calcular la configuración optima de guijarros: crear un arreglo de $n$ elementos para cada patrón valido (8 en total). En un ciclo desde $1 ... n$, ir almacenando en cada arreglo la configuración valida de columnas que permite obtener el valor máximo en cada caso y en una variable ir actualizando la suma máxima. Esto se puede hacer almacenando la suma del valor obtenido hasta el momento mas el valor de las celdas cubiertas por $x$, si al agregar la siguiente columna de tipo $x'$ en la posición $n+1$ se puede obtener un máximo mas alto mediante otra configuración de tipo $x$ entonces se puede reconstruir $1...x$ siempre y cuando $x$ siga siendo compatible con $x'$. Este algoritmo es de orden $O(n)$ por que el llenado de el valor constante de arreglos se hace en un solo ciclo.  
+\end{enumerate}
+\end{section}
+\newpage
+
+\begin{section}{Fourier Fast Transform, FFT.} \noindent 
+\begin{enumerate}[a., font=\bfseries]
+\item \textbf{Problema.} Se tienen los siguientes polinomios:
+\begin{center}
+$p(x)=a_0+a_1x+...+a_{n-1}x^{n-1}$\\
+\vspace{1em}
+$q(x)=b_0+b_1x+...+b_{x-1}x^{n-1}$
+\end{center}
+Cuyo producto esta definido por:
+\begin{center}
+$p(x)\cdot q(x) = c_0+c_1x+...+c_{2n-2}x^{2n-2}$
+\end{center}
+Para calcular el producto de una multiplicación de polinomios cada $a_i$ es multiplicado con cada $b_j$, para $0\leq i,j \leq n-1$, esto representa hasta $n^2$ multiplicaciones, dado que algunos coeficientes pueden ser cero. Obtener cada $c_i$ implica algunas menos adiciones que multiplicaciones, entonces se tiene que hay hasta $n^2 - 2n+1$ adiciones. En conclusión el numero de operaciones aritméticas es $O(n^2)$. \cite{jia2014polynomial}
+\item \textbf{Algoritmo.}
+\item \textbf{$(1-2x-x^2+x^3)*(2+x-4x^2+x^3)=2-3x-8x^2+10x^3+3x^4-5x^5+x^6$}
+\end{enumerate}
+\end{section}
+
+\newpage
+\nocite{*}
+\bibliographystyle{ieeetr}
+\bibliography{bibliography/ref}
+\end{document}
+
